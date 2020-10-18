@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import Link from "next/link";
+// import Link from "next/link";
+
+import Select from "react-select";
+import { TokenBody } from "./TokenBody";
 
 import { images } from "../utils/images";
 export type ObjectEntries = <T>(
@@ -17,43 +20,60 @@ const allAddresses = {
   "0x": "0x6f16e5FC3Be15Ba3b08Fc884d100a53723A1cA72",
 };
 
-const RowContainer = styled.div`
-  display: inline-block;
-  border: 2px solid orange;
-  border-radius: 10px;
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  cursor: pointer;
-`;
-
 const CryptoLogo = styled.img`
-  height: 36px;
+  height: 20px;
   max-width: 40px;
   margin-right: 20px;
 `;
 
-const CryptoName = styled.b`
-  font-size: 22px;
-  margin-right: 20px;
+const RowContainer = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const allAddressOptions = Object.keys(allAddresses).map((tokenName) => {
+  return {
+    value: tokenName,
+    label: (
+      <RowContainer>
+        <CryptoLogo src={(images as any)[tokenName]} />
+        {tokenName}
+      </RowContainer>
+    ),
+    color: "blue",
+  };
+});
+
+const Header = styled.div`
+  background-color: lightgrey;
+  padding: 40px 20px;
+  border-radius: 10px 10px 0px 0px;
+  margin: 0px;
+`;
+const Body = styled.div`
+  margin: 20px;
 `;
 export const AcceptAny = () => {
+  const [selectedValue, setSelectedValue] = useState<any>(allAddressOptions[0]);
   return (
-    <>
-      {(Object.entries as ObjectEntries)(allAddresses).map(
-        ([token, address]) => (
-          <Link href={`/pay/${token}/${address}`}>
-            <RowContainer key={address}>
-              <>
-                <CryptoLogo src={images[token]} />
-                <CryptoName>{token}</CryptoName>
-                {">"}
-              </>
-            </RowContainer>
-          </Link>
-        )
-      )}
-    </>
+    <div>
+      <Header>
+        <div style={{ marginBottom: "8px" }}>I want to send</div>
+        <Select
+          value={selectedValue}
+          label="Select CryptoCurrency"
+          options={allAddressOptions}
+          onChange={setSelectedValue}
+          // styles={colourStyles}
+        />
+      </Header>
+      <Body>
+        <TokenBody
+          token={selectedValue.value}
+          address={(allAddresses as any)[selectedValue.value]}
+        />
+      </Body>
+    </div>
   );
 };
