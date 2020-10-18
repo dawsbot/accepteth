@@ -1,10 +1,5 @@
-import styled from 'styled-components'
-
-const Title = styled.h1`
-  color: red;
-  font-size: 50px;
-`
+import { AcceptAny } from "../src/components/AcceptAny";
 
 export default function Home() {
-  return <Title>My page</Title>
+  return <AcceptAny />;
 }

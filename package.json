@@ -8,12 +8,14 @@
   },
   "dependencies": {
     "next": "latest",
+    "qrcode.react": "^1.0.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "styled-components": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "12.0.12",
+    "@types/qrcode.react": "^1.0.1",
     "@types/react": "16.8.23",
     "@types/react-dom": "16.8.4",
     "@types/styled-components": "5.0.1",
