@@ -6,13 +6,16 @@ import styled from "styled-components";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { AllValidTokens } from "./AcceptAny";
 
-const ValidateRow = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 const ValidateAddressLink = styled.a`
+  color: white;
   text-decoration: none;
+  display: flex;
+  align-items: center; // vertical center
+  justify-content: center; // horizontal center
+  padding: 20px 30px;
+  font-weight: bold;
+  background-image: linear-gradient(to right, #69e495, #0eb8c5);
+  border-radius: 0px 0px 8px 8px;
 `;
 
 const QRContainer = styled.div`
@@ -92,6 +95,9 @@ const buildBlockExplorerUrl = (token: AllValidTokens, address: string) => {
       return "";
   }
 };
+const Body = styled.div`
+  padding: 50px 30px 50px 30px; ;
+`;
 export const TokenBody = ({
   token,
   address,
@@ -101,30 +107,29 @@ export const TokenBody = ({
 }) => {
   return (
     <div>
-      <div style={{ fontWeight: "bold", paddingBottom: "10px" }}>
-        Send {token} to:{" "}
-      </div>
-      <AddressWithCopy address={address} />
-      <Or>or</Or>
-      Scan here:
-      <QRContainer>
-        <QRCode value={address} />
-      </QRContainer>
-      <br />
+      <Body>
+        <div style={{ fontWeight: "bold", paddingBottom: "10px" }}>
+          Send {token} to:{" "}
+        </div>
+        <AddressWithCopy address={address} />
+        <Or>or</Or>
+        Scan here:
+        <QRContainer>
+          <QRCode value={address} />
+        </QRContainer>
+      </Body>
       {
-        <ValidateRow>
+        <ValidateAddressLink
+          href={buildBlockExplorerUrl(token, address)}
+          target="_blank"
+        >
           <HiLockClosed
-            color="green"
-            size="20"
+            color="white"
+            size="22"
             style={{ marginRight: "6px" }}
           />
-          <ValidateAddressLink
-            href={buildBlockExplorerUrl(token, address)}
-            target="_blank"
-          >
-            Validate address
-          </ValidateAddressLink>
-        </ValidateRow>
+          Validate address
+        </ValidateAddressLink>
       }
     </div>
   );

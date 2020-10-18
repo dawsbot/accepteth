@@ -59,9 +59,7 @@ const H3 = styled.h3`
   color: white;
   margin-top: 0px;
 `;
-const Body = styled.div`
-  padding: 50px 30px;
-`;
+
 export const AcceptAny = () => {
   const [selectedValue, setSelectedValue] = useState<any>(allAddressOptions[0]);
   return (
@@ -76,12 +74,10 @@ export const AcceptAny = () => {
           // styles={colourStyles}
         />
       </Header>
-      <Body>
-        <TokenBody
-          token={selectedValue.value}
-          address={(allAddresses as any)[selectedValue.value]}
-        />
-      </Body>
+      <TokenBody
+        token={selectedValue.value}
+        address={(allAddresses as any)[selectedValue.value]}
+      />
     </div>
   );
 };
