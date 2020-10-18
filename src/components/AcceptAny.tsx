@@ -18,7 +18,9 @@ const allAddresses = {
   ["Ethereum Classic"]: "0x26A7fA981E513873Ba036400dd70C787303930A4",
   ["Litecoin"]: "M9MYWkPkshQRRuyjMVPNfFjasu4sZi1reR",
   "0x": "0x6f16e5FC3Be15Ba3b08Fc884d100a53723A1cA72",
-};
+} as const;
+
+export type AllValidTokens = keyof typeof allAddresses;
 
 const CryptoLogo = styled.img`
   height: 20px;
@@ -37,7 +39,7 @@ const allAddressOptions = Object.keys(allAddresses).map((tokenName) => {
     value: tokenName,
     label: (
       <RowContainer>
-        <CryptoLogo src={(images as any)[tokenName]} />
+        <CryptoLogo src={images[tokenName as AllValidTokens]} />
         {tokenName}
       </RowContainer>
     ),
@@ -46,20 +48,26 @@ const allAddressOptions = Object.keys(allAddresses).map((tokenName) => {
 });
 
 const Header = styled.div`
-  background-color: lightgrey;
-  padding: 40px 20px;
+  background-color: black;
+  padding: 50px 30px;
   border-radius: 10px 10px 0px 0px;
   margin: 0px;
 `;
+
+const H3 = styled.h3`
+  margin-bottom: 10px;
+  color: white;
+  margin-top: 0px;
+`;
 const Body = styled.div`
-  margin: 20px;
+  padding: 50px 30px;
 `;
 export const AcceptAny = () => {
   const [selectedValue, setSelectedValue] = useState<any>(allAddressOptions[0]);
   return (
     <div>
       <Header>
-        <div style={{ marginBottom: "8px" }}>I want to send</div>
+        <H3>I want to send</H3>
         <Select
           value={selectedValue}
           label="Select CryptoCurrency"

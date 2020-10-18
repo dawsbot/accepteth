@@ -4,6 +4,7 @@ import QRCode from "qrcode.react";
 import { HiLockClosed } from "react-icons/hi";
 import styled from "styled-components";
 import CopyToClipboard from "react-copy-to-clipboard";
+import { AllValidTokens } from "./AcceptAny";
 
 const ValidateRow = styled.div`
   display: flex;
@@ -41,7 +42,8 @@ const CopyButton = styled.button`
   top: 0;
   padding: 10px 20px;
   border-width: 0px;
-  background-color: darkgrey;
+  background-color: black;
+  color: white;
 
   height: 40px;
   border-radius: 0px 6px 6px 0px;
@@ -73,25 +75,43 @@ const AddressWithCopy = ({ address }: { address: string }) => {
     </AddressContainer>
   );
 };
+const buildBlockExplorerUrl = (token: AllValidTokens, address: string) => {
+  switch (token) {
+    case "Ethereum":
+    case "0x":
+      return `https://etherscan.io/address/${address}`;
+    case "Bitcoin":
+      return `https://www.blockchain.com/btc/address/${address}`;
+    case "Bitcoin Cash":
+      return `https://www.blockchain.com/bch/address/${address}`;
+    case "Ethereum Classic":
+      return `https://blockscout.com/etc/mainnet/address/${address}`;
+    case "Litecoin":
+      return `https://blockchair.com/litecoin/address/${address}`;
+    default:
+      return "";
+  }
+};
 export const TokenBody = ({
   token,
   address,
 }: {
-  token: string;
+  token: AllValidTokens;
   address: string;
 }) => {
   return (
     <div>
-      Send {token} to
-      <br />
+      <div style={{ fontWeight: "bold", paddingBottom: "10px" }}>
+        Send {token} to:{" "}
+      </div>
       <AddressWithCopy address={address} />
-      <Or>OR</Or>
+      <Or>or</Or>
       Scan here:
       <QRContainer>
         <QRCode value={address} />
       </QRContainer>
       <br />
-      {token === "Ethereum" && (
+      {
         <ValidateRow>
           <HiLockClosed
             color="green"
@@ -99,13 +119,13 @@ export const TokenBody = ({
             style={{ marginRight: "6px" }}
           />
           <ValidateAddressLink
-            href={`https://etherscan.io/address/${address}`}
+            href={buildBlockExplorerUrl(token, address)}
             target="_blank"
           >
             Validate address
           </ValidateAddressLink>
         </ValidateRow>
-      )}
+      }
     </div>
   );
 };
