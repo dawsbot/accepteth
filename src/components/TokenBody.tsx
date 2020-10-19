@@ -115,7 +115,7 @@ export const TokenBody = ({
         <Or>or</Or>
         Scan here:
         <QRContainer>
-          <QRCode value={address} />
+          <QRCode value={address} size={180} />
         </QRContainer>
       </Body>
       {

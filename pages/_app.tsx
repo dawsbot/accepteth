@@ -1,5 +1,6 @@
-// import App from "next/app";
-import type { AppProps /*, AppContext */ } from "next/app";
+import type { AppProps } from "next/app";
+import React from "react";
+import Head from "next/head";
 
 import styled, { createGlobalStyle } from "styled-components";
 
@@ -19,10 +20,15 @@ const Container = styled.div`
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Container>
-      <Component {...pageProps} />
-      <GlobalStyle />
-    </Container>
+    <>
+      <Head>
+        <title>AcceptEth</title>
+      </Head>
+      <Container>
+        <Component {...pageProps} />
+        <GlobalStyle />
+      </Container>
+    </>
   );
 }
 
