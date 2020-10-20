@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import Select from "react-select";
 import { BiPlusCircle } from "react-icons/bi";
-import { TiDeleteOutline } from "react-icons/ti";
 
 import { images } from "../../src/utils/images";
 import { CenterChildren } from "../../src/components/CenterChildren";
@@ -163,7 +162,8 @@ const AcceptAny = () => {
                   <SelectContainer>
                     <Select
                       styles={{
-                        container: () => ({
+                        container: (provided) => ({
+                          ...provided,
                           width: "100%",
                         }),
                       }}
@@ -199,12 +199,6 @@ const AcceptAny = () => {
                         });
                       }}
                     />
-                    {/* <TiDeleteOutline
-                      style={{ marginLeft: "6px" }}
-                      color="white"
-                      size="44"
-                      onClick={() => {}}
-                    /> */}
                   </SelectContainer>
                   <Input
                     value={address}
