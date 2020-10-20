@@ -137,6 +137,14 @@ const AcceptAny = () => {
                 (addressOption) => addressOption.value === token
               );
 
+              const currentAddressOptions = allAddressOptions.filter(
+                (addressOption) => {
+                  const allVisibleTokens = Object.entries(allWalletState)
+                    .filter(([token, data]: any) => data.visible)
+                    .map(([token, data]: any) => token);
+                  return !allVisibleTokens.includes(addressOption.value);
+                }
+              );
               return (
                 <div
                   key={token}
@@ -150,7 +158,7 @@ const AcceptAny = () => {
                   <Select
                     value={selectedValue}
                     label="Select CryptoCurrency"
-                    options={allAddressOptions}
+                    options={currentAddressOptions}
                     onChange={(newAddressOption) => {
                       setAllWalletState({
                         ...allWalletState,
