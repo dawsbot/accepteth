@@ -10,7 +10,6 @@ const GlobalStyle = createGlobalStyle<any>`
     font-size: 16px;
     padding: 0px;
     margin: 0px;
-  /* align-items: center; */
   }
 `;
 

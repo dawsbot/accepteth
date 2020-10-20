@@ -36,6 +36,7 @@ const AddressContainer = styled.div`
   align-items: center;
   position: relative;
   font-size: 14px;
+  background-color: lightgrey;
 `;
 const CopyButton = styled.button`
   cursor: pointer;
@@ -113,7 +114,7 @@ export const TokenBody = ({
         </div>
         <AddressWithCopy address={address} />
         <Or>or</Or>
-        Scan here:
+        Scan Here:
         <QRContainer>
           <QRCode value={address} size={180} />
         </QRContainer>

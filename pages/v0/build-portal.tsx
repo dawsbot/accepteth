@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import Select from "react-select";
 import { BiPlusCircle } from "react-icons/bi";
+import { TiDeleteOutline } from "react-icons/ti";
 
 import { images } from "../../src/utils/images";
 import { CenterChildren } from "../../src/components/CenterChildren";
@@ -67,6 +68,10 @@ const PlusContainer = styled.div`
   justify-content: space-between;
   display: flex;
   align-items: center;
+`;
+
+const SelectContainer = styled.div`
+  display: flex;
 `;
 
 const initialState = Object.keys(images).reduce((acc, tokenName) => {
@@ -155,24 +160,52 @@ const AcceptAny = () => {
                     borderRadius: "6px",
                   }}
                 >
-                  <Select
-                    value={selectedValue}
-                    label="Select CryptoCurrency"
-                    options={currentAddressOptions}
-                    onChange={(newAddressOption) => {
-                      setAllWalletState({
-                        ...allWalletState,
-                        [newAddressOption.value]: {
-                          value: "",
-                          visible: true,
-                        },
-                        [selectedValue.value]: {
+                  <SelectContainer>
+                    <Select
+                      styles={{
+                        container: () => ({
+                          width: "100%",
+                        }),
+                      }}
+                      value={selectedValue}
+                      label="Select CryptoCurrency"
+                      options={currentAddressOptions}
+                      onChange={(newAddressOption) => {
+                        setAllWalletState({
+                          ...allWalletState,
+                          [newAddressOption.value]: {
+                            value: "",
+                            visible: true,
+                          },
+                          [selectedValue.value]: {
+                            value: "",
+                            visible: false,
+                          },
+                        });
+                      }}
+                    />
+                    <BiPlusCircle
+                      color="white"
+                      size="38"
+                      style={{
+                        marginLeft: "10px",
+                        cursor: "pointer",
+                        transform: "rotate(45deg)",
+                      }}
+                      onClick={() => {
+                        editWalletAddress(selectedValue.value, {
                           value: "",
                           visible: false,
-                        },
-                      });
-                    }}
-                  />
+                        });
+                      }}
+                    />
+                    {/* <TiDeleteOutline
+                      style={{ marginLeft: "6px" }}
+                      color="white"
+                      size="44"
+                      onClick={() => {}}
+                    /> */}
+                  </SelectContainer>
                   <Input
                     value={address}
                     onChange={(e) =>
