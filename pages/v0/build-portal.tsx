@@ -65,44 +65,93 @@ const InputContainer = styled.div`
   display: flex;
   align-items: center;
 `;
+
+const initialState = Object.keys(images).reduce((acc, tokenName) => {
+  acc[tokenName] = {
+    value: "",
+    visible: true,
+  };
+  return acc;
+}, {} as any);
+
 const AcceptAny = () => {
-  const [selectedValue, setSelectedValue] = useState<any>(allAddressOptions[0]);
-  const [currentAddress, setCurrentAddress] = useState("");
-  const [allWalletState, setAllWalletState] = useState({});
-  const persistWalletAddress = () => {
+  // const [selectedValue, setSelectedValue] = useState<any>(allAddressOptions[0]);
+  // const [currentAddress, setCurrentAddress] = useState("");
+  const [allWalletState, setAllWalletState] = useState(initialState);
+  const editWalletAddress = (token: keyof typeof images, value: string) => {
     setAllWalletState({
-      [selectedValue.value]: currentAddress,
+      ...allWalletState,
+      [token]: {
+        value,
+        visible: true,
+      },
     });
   };
+
+  const isClient = typeof window !== "undefined";
+  const buildHref = `${
+    isClient ? window.location.origin : ""
+  }/v0/pay-portal?${Object.entries(allWalletState)
+    .filter(([_, data]: any) => data.visible && data.value !== "")
+    .map(([token, data]: any) => `${token}=${data.value}`)
+    .join("&")}`;
+
   return (
     <>
       <Header>
         <H3>I want to accept</H3>
-        <Select
-          value={selectedValue}
-          label="Select CryptoCurrency"
-          options={allAddressOptions}
-          onChange={setSelectedValue}
-          // styles={colourStyles}
-        />
-        <InputContainer>
-          <Input
-            value={currentAddress}
-            onChange={(e) => setCurrentAddress(e.target.value)}
-            placeholder={`Your ${selectedValue.value} address`}
-          />
-          <BiPlusCircle
-            color="white"
-            size="38"
-            style={{ marginLeft: "10px", cursor: "pointer" }}
-            onClick={persistWalletAddress}
-          />
-        </InputContainer>
-        {Object.entries(allWalletState).map(([token, address]) => (
-          <div style={{ color: "white" }}>
-            {token}, {address}
-          </div>
-        ))}
+        {Object.entries(allWalletState).map(([token, data]: any) => {
+          const { value, visible } = data;
+          const address = data.value;
+          if (!visible) return null;
+          // let selectedValue;
+          // const selectedValue = allAddressOptions.find(addressOption => {
+          //   return addressOption.value ===
+
+          // });
+          const selectedValue = allAddressOptions.find(
+            (addressOption) => addressOption.value === token
+          );
+
+          // const selectValue =
+          return (
+            <div
+              style={{
+                marginTop: "20px",
+                border: "1px solid white",
+                padding: "14px",
+                borderRadius: "6px",
+              }}
+            >
+              <Select
+                value={selectedValue}
+                label="Select CryptoCurrency"
+                options={allAddressOptions}
+                // onChange={(newAddressOption) => editWalletAddress(newAddressOption.value, )}
+                // styles={colourStyles}
+              />
+              <InputContainer>
+                <Input
+                  value={address}
+                  onChange={(e) => editWalletAddress(token, e.target.value)}
+                  placeholder={`Your ${token} address`}
+                />
+                <BiPlusCircle
+                  color="white"
+                  size="38"
+                  style={{ marginLeft: "10px", cursor: "pointer" }}
+                  // onClick={persistWalletAddress}
+                />
+              </InputContainer>
+            </div>
+          );
+        })}
+
+        {isClient && (
+          <a href={buildHref}>
+            <code style={{ color: "white" }}>{buildHref}</code>
+          </a>
+        )}
       </Header>
     </>
   );
