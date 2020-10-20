@@ -7,6 +7,8 @@ import { TokenBody } from "../../src/components/TokenBody";
 
 import { AllValidTokens, images } from "../../src/utils/images";
 import { useRouter } from "next/dist/client/router";
+import { CenterChildren } from "../../src/components/CenterChildren";
+import { PortalContainer } from "../../src/components/PortalContainer";
 export type ObjectEntries = <T>(
   o: T
 ) => [Extract<keyof T, string>, T[keyof T]][];
@@ -62,20 +64,22 @@ const AcceptAny = () => {
 
   const currentAddress = router.query[selectedValue.value] as string;
   return (
-    <>
-      <Header>
-        <H3>I want to send</H3>
-        <Select
-          value={selectedValue}
-          label="Select CryptoCurrency"
-          options={allAddressOptions}
-          onChange={setSelectedValue}
-        />
-      </Header>
-      {currentAddress && (
-        <TokenBody token={selectedValue.value} address={currentAddress} />
-      )}
-    </>
+    <CenterChildren>
+      <PortalContainer>
+        <Header>
+          <H3>I want to send</H3>
+          <Select
+            value={selectedValue}
+            label="Select CryptoCurrency"
+            options={allAddressOptions}
+            onChange={setSelectedValue}
+          />
+        </Header>
+        {currentAddress && (
+          <TokenBody token={selectedValue.value} address={currentAddress} />
+        )}
+      </PortalContainer>
+    </CenterChildren>
   );
 };
 

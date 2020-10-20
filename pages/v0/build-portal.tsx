@@ -5,6 +5,8 @@ import Select from "react-select";
 import { BiPlusCircle } from "react-icons/bi";
 
 import { images } from "../../src/utils/images";
+import { CenterChildren } from "../../src/components/CenterChildren";
+import { PortalContainer } from "../../src/components/PortalContainer";
 export type ObjectEntries = <T>(
   o: T
 ) => [Extract<keyof T, string>, T[keyof T]][];
@@ -58,10 +60,11 @@ const Input = styled.input`
   border-width: 0px;
   width: 100%;
   font-family: monospace;
+  margin-top: 10px;
 `;
 
-const InputContainer = styled.div`
-  margin-top: 10px;
+const PlusContainer = styled.div`
+  justify-content: space-between;
   display: flex;
   align-items: center;
 `;
@@ -69,23 +72,37 @@ const InputContainer = styled.div`
 const initialState = Object.keys(images).reduce((acc, tokenName) => {
   acc[tokenName] = {
     value: "",
-    visible: true,
+    visible: false,
   };
   return acc;
 }, {} as any);
+// default only ethereum visible
+initialState.Ethereum.visible = true;
 
 const AcceptAny = () => {
-  // const [selectedValue, setSelectedValue] = useState<any>(allAddressOptions[0]);
-  // const [currentAddress, setCurrentAddress] = useState("");
   const [allWalletState, setAllWalletState] = useState(initialState);
-  const editWalletAddress = (token: keyof typeof images, value: string) => {
+  const editWalletAddress = (
+    token: keyof typeof images,
+    newData: { value: string; visible: boolean }
+  ) => {
     setAllWalletState({
       ...allWalletState,
-      [token]: {
-        value,
-        visible: true,
-      },
+      [token]: newData,
     });
+  };
+
+  const makeNewTokenVisible = () => {
+    const firstInvisibleToken = Object.entries(allWalletState).find(
+      ([token, data]: any) => {
+        return !data.visible;
+      }
+    );
+
+    const newData = {
+      ...firstInvisibleToken[1],
+      visible: true,
+    };
+    editWalletAddress(firstInvisibleToken[0], newData);
   };
 
   const isClient = typeof window !== "undefined";
@@ -97,63 +114,80 @@ const AcceptAny = () => {
     .join("&")}`;
 
   return (
-    <>
-      <Header>
-        <H3>I want to accept</H3>
-        {Object.entries(allWalletState).map(([token, data]: any) => {
-          const { value, visible } = data;
-          const address = data.value;
-          if (!visible) return null;
-          // let selectedValue;
-          // const selectedValue = allAddressOptions.find(addressOption => {
-          //   return addressOption.value ===
+    <CenterChildren>
+      <PortalContainer>
+        <Header>
+          <PlusContainer>
+            <H3>I want to accept</H3>{" "}
+            <BiPlusCircle
+              color="white"
+              size="38"
+              style={{ marginLeft: "10px", cursor: "pointer" }}
+              onClick={makeNewTokenVisible}
+            />
+          </PlusContainer>
+          {Object.entries(allWalletState).map(
+            ([token, data]: any, index: number) => {
+              console.log(token, data);
+              const { visible } = data;
+              const address = data.value;
+              if (!visible) return null;
 
-          // });
-          const selectedValue = allAddressOptions.find(
-            (addressOption) => addressOption.value === token
-          );
+              const selectedValue = allAddressOptions.find(
+                (addressOption) => addressOption.value === token
+              );
 
-          // const selectValue =
-          return (
-            <div
-              style={{
-                marginTop: "20px",
-                border: "1px solid white",
-                padding: "14px",
-                borderRadius: "6px",
-              }}
-            >
-              <Select
-                value={selectedValue}
-                label="Select CryptoCurrency"
-                options={allAddressOptions}
-                // onChange={(newAddressOption) => editWalletAddress(newAddressOption.value, )}
-                // styles={colourStyles}
-              />
-              <InputContainer>
-                <Input
-                  value={address}
-                  onChange={(e) => editWalletAddress(token, e.target.value)}
-                  placeholder={`Your ${token} address`}
-                />
-                <BiPlusCircle
-                  color="white"
-                  size="38"
-                  style={{ marginLeft: "10px", cursor: "pointer" }}
-                  // onClick={persistWalletAddress}
-                />
-              </InputContainer>
-            </div>
-          );
-        })}
+              return (
+                <div
+                  key={token}
+                  style={{
+                    marginTop: "20px",
+                    border: "1px solid white",
+                    padding: "8px",
+                    borderRadius: "6px",
+                  }}
+                >
+                  <Select
+                    value={selectedValue}
+                    label="Select CryptoCurrency"
+                    options={allAddressOptions}
+                    onChange={(newAddressOption) => {
+                      setAllWalletState({
+                        ...allWalletState,
+                        [newAddressOption.value]: {
+                          value: "",
+                          visible: true,
+                        },
+                        [selectedValue.value]: {
+                          value: "",
+                          visible: false,
+                        },
+                      });
+                    }}
+                  />
+                  <Input
+                    value={address}
+                    onChange={(e) =>
+                      editWalletAddress(token, {
+                        value: e.target.value,
+                        visible: true,
+                      })
+                    }
+                    placeholder={`Your ${token} address`}
+                  />
+                </div>
+              );
+            }
+          )}
+        </Header>
 
         {isClient && (
-          <a href={buildHref}>
-            <code style={{ color: "white" }}>{buildHref}</code>
+          <a href={buildHref} target="_blank" style={{ color: "black" }}>
+            <code>{buildHref}</code>
           </a>
         )}
-      </Header>
-    </>
+      </PortalContainer>
+    </CenterChildren>
   );
 };
 

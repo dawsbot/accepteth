@@ -5,17 +5,17 @@ import Head from "next/head";
 import styled, { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle<any>`
-  body {
+  body{
     font-family: 'Lato', sans-serif;
     font-size: 16px;
+    padding: 0px;
+    margin: 0px;
+  /* align-items: center; */
   }
 `;
 
 const Container = styled.div`
-  max-width: 400px;
-  border: 1px solid black;
-  border-radius: 10px;
-  margin: 100px;
+  margin-top: 100px;
 `;
 
 function MyApp({ Component, pageProps }: AppProps) {
