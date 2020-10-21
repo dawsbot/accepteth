@@ -117,103 +117,111 @@ const AcceptAny = () => {
     .map(([token, data]: any) => `${token}=${data.value}`)
     .join("&")}`;
 
+  const allVisibleWalletState = Object.entries(allWalletState).filter(
+    ([token, data]: any) => {
+      console.log(token, data);
+      return data.visible;
+    }
+  );
+
+  console.log(allVisibleWalletState.length);
   return (
     <CenterChildren>
       <PortalContainer>
         <Header>
           <PlusContainer>
             <H3>I want to accept</H3>{" "}
-            <BiPlusCircle
-              color="white"
-              size="38"
-              style={{ marginLeft: "10px", cursor: "pointer" }}
-              onClick={makeNewTokenVisible}
-            />
+            {allVisibleWalletState.length <
+              Object.keys(allWalletState).length && (
+              <BiPlusCircle
+                color="white"
+                size="38"
+                style={{ marginLeft: "10px", cursor: "pointer" }}
+                onClick={makeNewTokenVisible}
+              />
+            )}
           </PlusContainer>
-          {Object.entries(allWalletState).map(
-            ([token, data]: any, index: number) => {
-              console.log(token, data);
-              const { visible } = data;
-              const address = data.value;
-              if (!visible) return null;
+          {Object.entries(allWalletState).map(([token, data]: any) => {
+            const { visible } = data;
+            const address = data.value;
+            if (!visible) return null;
 
-              const selectedValue = allAddressOptions.find(
-                (addressOption) => addressOption.value === token
-              );
+            const selectedValue = allAddressOptions.find(
+              (addressOption) => addressOption.value === token
+            );
 
-              const currentAddressOptions = allAddressOptions.filter(
-                (addressOption) => {
-                  const allVisibleTokens = Object.entries(allWalletState)
-                    .filter(([token, data]: any) => data.visible)
-                    .map(([token, data]: any) => token);
-                  return !allVisibleTokens.includes(addressOption.value);
-                }
-              );
-              return (
-                <div
-                  key={token}
-                  style={{
-                    marginTop: "20px",
-                    border: "1px solid white",
-                    padding: "8px",
-                    borderRadius: "6px",
-                  }}
-                >
-                  <SelectContainer>
-                    <Select
-                      styles={{
-                        container: (provided) => ({
-                          ...provided,
-                          width: "100%",
-                        }),
-                      }}
-                      value={selectedValue}
-                      label="Select CryptoCurrency"
-                      options={currentAddressOptions}
-                      onChange={(newAddressOption) => {
-                        setAllWalletState({
-                          ...allWalletState,
-                          [newAddressOption.value]: {
-                            value: "",
-                            visible: true,
-                          },
-                          [selectedValue.value]: {
-                            value: "",
-                            visible: false,
-                          },
-                        });
-                      }}
-                    />
-                    <BiPlusCircle
-                      color="white"
-                      size="38"
-                      style={{
-                        marginLeft: "10px",
-                        cursor: "pointer",
-                        transform: "rotate(45deg)",
-                      }}
-                      onClick={() => {
-                        editWalletAddress(selectedValue.value, {
+            const currentAddressOptions = allAddressOptions.filter(
+              (addressOption) => {
+                const allVisibleTokens = Object.entries(allWalletState)
+                  .filter(([token, data]: any) => data.visible)
+                  .map(([token, data]: any) => token);
+                return !allVisibleTokens.includes(addressOption.value);
+              }
+            );
+            return (
+              <div
+                key={token}
+                style={{
+                  marginTop: "20px",
+                  border: "1px solid white",
+                  padding: "8px",
+                  borderRadius: "6px",
+                }}
+              >
+                <SelectContainer>
+                  <Select
+                    styles={{
+                      container: (provided) => ({
+                        ...provided,
+                        width: "100%",
+                      }),
+                    }}
+                    value={selectedValue}
+                    label="Select CryptoCurrency"
+                    options={currentAddressOptions}
+                    onChange={(newAddressOption) => {
+                      setAllWalletState({
+                        ...allWalletState,
+                        [newAddressOption.value]: {
+                          value: "",
+                          visible: true,
+                        },
+                        [selectedValue.value]: {
                           value: "",
                           visible: false,
-                        });
-                      }}
-                    />
-                  </SelectContainer>
-                  <Input
-                    value={address}
-                    onChange={(e) =>
-                      editWalletAddress(token, {
-                        value: e.target.value,
-                        visible: true,
-                      })
-                    }
-                    placeholder={`Your ${token} address`}
+                        },
+                      });
+                    }}
                   />
-                </div>
-              );
-            }
-          )}
+                  <BiPlusCircle
+                    color="white"
+                    size="38"
+                    style={{
+                      marginLeft: "10px",
+                      cursor: "pointer",
+                      transform: "rotate(45deg)",
+                    }}
+                    onClick={() => {
+                      editWalletAddress(selectedValue.value, {
+                        value: "",
+                        visible: false,
+                      });
+                    }}
+                  />
+                </SelectContainer>
+                <Input
+                  value={address}
+                  onChange={(e) =>
+                    editWalletAddress(token, {
+                      value: e.target.value,
+                      visible: true,
+                    })
+                  }
+                  placeholder={`Your ${token} address`}
+                />
+              </div>
+            );
+          })}
         </Header>
 
         {isClient && (
