@@ -117,14 +117,10 @@ const AcceptAny = () => {
     .map(([token, data]: any) => `${token}=${data.value}`)
     .join("&")}`;
 
-  const allVisibleWalletState = Object.entries(allWalletState).filter(
-    ([token, data]: any) => {
-      console.log(token, data);
-      return data.visible;
-    }
+  const allVisibleWalletState = Object.values(allWalletState).filter(
+    (data: any) => data.visible
   );
 
-  console.log(allVisibleWalletState.length);
   return (
     <CenterChildren>
       <PortalContainer>
