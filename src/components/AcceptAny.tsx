@@ -63,7 +63,7 @@ const H3 = styled.h3`
 export const AcceptAny = () => {
   const [selectedValue, setSelectedValue] = useState<any>(allAddressOptions[0]);
   return (
-    <div>
+    <>
       <Header>
         <H3>I want to send</H3>
         <Select
@@ -78,6 +78,6 @@ export const AcceptAny = () => {
         token={selectedValue.value}
         address={(allAddresses as any)[selectedValue.value]}
       />
-    </div>
+    </>
   );
 };

@@ -1,10 +1,9 @@
-// import { useRouter } from "next/dist/client/router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import QRCode from "qrcode.react";
 import { HiLockClosed } from "react-icons/hi";
 import styled from "styled-components";
-import CopyToClipboard from "react-copy-to-clipboard";
 import { AllValidTokens } from "./AcceptAny";
+import { TextDisplayWithCopyButton } from "./TextDisplayWithCopyButton";
 
 const ValidateAddressLink = styled.a`
   color: white;
@@ -29,55 +28,6 @@ const Or = styled.div`
   margin-bottom: 30px;
 `;
 
-const AddressContainer = styled.div`
-  border: 1px solid lightseagreen;
-  padding-left: 16px;
-  border-radius: 6px;
-  align-items: center;
-  position: relative;
-  font-size: 14px;
-`;
-const CopyButton = styled.button`
-  cursor: pointer;
-  position: absolute;
-  font-weight: bold;
-  right: 0;
-  top: 0;
-  padding: 10px 20px;
-  border-width: 0px;
-  background-color: black;
-  color: white;
-
-  height: 40px;
-  border-radius: 0px 6px 6px 0px;
-  font-size: 14px;
-`;
-
-const AddressWithCopy = ({ address }: { address: string }) => {
-  const [copied, setCopied] = useState(false);
-  useEffect(() => {
-    setCopied(false);
-  }, [address]);
-  return (
-    <AddressContainer>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          height: "40px",
-          overflowX: "scroll",
-        }}
-      >
-        {address}
-      </div>
-      <CopyToClipboard text={address} onCopy={() => setCopied(true)}>
-        <CopyButton>
-          <>{copied ? "Copied" : "Copy"}</>
-        </CopyButton>
-      </CopyToClipboard>
-    </AddressContainer>
-  );
-};
 const buildBlockExplorerUrl = (token: AllValidTokens, address: string) => {
   switch (token) {
     case "Ethereum":
@@ -111,9 +61,9 @@ export const TokenBody = ({
         <div style={{ fontWeight: "bold", paddingBottom: "10px" }}>
           Send {token} to:{" "}
         </div>
-        <AddressWithCopy address={address} />
+        <TextDisplayWithCopyButton text={address} />
         <Or>or</Or>
-        Scan here:
+        Scan Here:
         <QRContainer>
           <QRCode value={address} size={180} />
         </QRContainer>
