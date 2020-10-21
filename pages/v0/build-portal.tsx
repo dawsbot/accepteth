@@ -24,6 +24,10 @@ const RowContainer = styled.div`
   align-items: center;
   cursor: pointer;
 `;
+const ColoredBar = styled.div`
+  height: 20px;
+  background: linear-gradient(to right, #69e495, #0eb8c5);
+`;
 
 const allAddressOptions = Object.keys(images).map((tokenName) => {
   return {
@@ -110,16 +114,20 @@ const AcceptAny = () => {
   };
 
   const isClient = typeof window !== "undefined";
+
+  const allVisibleWalletState = Object.entries(allWalletState).filter(
+    ([value, data]: any) => data.visible
+  );
+
+  const allVisibleNonEmptyWalletState = allVisibleWalletState.filter(
+    ([_, data]: any) => data.visible && data.value !== ""
+  );
+
   const buildHref = `${
     isClient ? window.location.origin : ""
-  }/v0/pay-portal?${Object.entries(allWalletState)
-    .filter(([_, data]: any) => data.visible && data.value !== "")
+  }/v0/pay-portal?${allVisibleNonEmptyWalletState
     .map(([token, data]: any) => `${token}=${data.value}`)
     .join("&")}`;
-
-  const allVisibleWalletState = Object.values(allWalletState).filter(
-    (data: any) => data.visible
-  );
 
   return (
     <CenterChildren>
@@ -220,10 +228,19 @@ const AcceptAny = () => {
           })}
         </Header>
 
-        {isClient && (
-          <a href={buildHref} target="_blank" style={{ color: "black" }}>
-            <code>{buildHref}</code>
-          </a>
+        {isClient && allVisibleNonEmptyWalletState.length > 0 && (
+          <>
+            <ColoredBar />
+            <div
+              style={{
+                padding: "40px 30px 50px 30px",
+              }}
+            >
+              <a href={buildHref} target="_blank" style={{ color: "black" }}>
+                <code>{buildHref}</code>
+              </a>
+            </div>
+          </>
         )}
       </PortalContainer>
     </CenterChildren>
