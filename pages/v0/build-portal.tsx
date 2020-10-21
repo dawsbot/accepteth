@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import Select from "react-select";
@@ -276,9 +276,6 @@ const AcceptAny = () => {
               }}
             >
               <TextDisplayWithCopyButton text={buildHref} isAnchor />
-              {/* <a href={buildHref} target="_blank" style={{ color: "black" }}>
-                <code>{buildHref}</code>
-              </a> */}
             </div>
           </>
         )}
