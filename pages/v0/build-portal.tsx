@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import Select from "react-select";
@@ -7,6 +7,7 @@ import { BiPlusCircle } from "react-icons/bi";
 import { images } from "../../src/utils/images";
 import { CenterChildren } from "../../src/components/CenterChildren";
 import { PortalContainer } from "../../src/components/PortalContainer";
+import { TextDisplayWithCopyButton } from "../../src/components/TextDisplayWithCopyButton";
 export type ObjectEntries = <T>(
   o: T
 ) => [Extract<keyof T, string>, T[keyof T]][];
@@ -29,7 +30,15 @@ const ColoredBar = styled.div`
   background: linear-gradient(to right, #69e495, #0eb8c5);
 `;
 
-const allAddressOptions = Object.keys(images).map((tokenName) => {
+type AddressOption = {
+  value: AllValidTokens;
+  label: React.ReactNode;
+  color: string;
+};
+type AllAddressOptions = AddressOption[];
+const allAddressOptions: AllAddressOptions = (Object.keys(
+  images
+) as AllValidTokens[]).map((tokenName) => {
   return {
     value: tokenName,
     label: (
@@ -77,13 +86,21 @@ const SelectContainer = styled.div`
   display: flex;
 `;
 
-const initialState = Object.keys(images).reduce((acc, tokenName) => {
-  acc[tokenName] = {
-    value: "",
-    visible: false,
-  };
-  return acc;
-}, {} as any);
+const initialState = (Object.keys(images) as AllValidTokens[]).reduce(
+  (
+    acc: {
+      [token in AllValidTokens]: { value: string; visible: boolean };
+    },
+    tokenName
+  ) => {
+    acc[tokenName] = {
+      value: "",
+      visible: false,
+    };
+    return acc;
+  },
+  {} as any
+);
 // default only ethereum visible
 initialState.Ethereum.visible = true;
 
@@ -100,11 +117,17 @@ const AcceptAny = () => {
   };
 
   const makeNewTokenVisible = () => {
-    const firstInvisibleToken = Object.entries(allWalletState).find(
-      ([token, data]: any) => {
+    const firstInvisibleToken = (Object.entries(allWalletState) as any).find(
+      ([token, data]: [
+        AllValidTokens,
+        { value: string; visible: boolean }
+      ]) => {
         return !data.visible;
       }
     );
+    if (!firstInvisibleToken) {
+      throw new Error("No new token to be made visible");
+    }
 
     const newData = {
       ...firstInvisibleToken[1],
@@ -129,6 +152,24 @@ const AcceptAny = () => {
     .map(([token, data]: any) => `${token}=${data.value}`)
     .join("&")}`;
 
+  const selectCryptoCurrency = (
+    newAddressOption: AddressOption,
+    selectedOption?: AddressOption
+  ) => {
+    setAllWalletState({
+      ...allWalletState,
+      [newAddressOption.value]: {
+        value: "",
+        visible: true,
+      },
+      ...(selectedOption && {
+        [selectedOption.value]: {
+          value: "",
+          visible: false,
+        },
+      }),
+    });
+  };
   return (
     <CenterChildren>
       <PortalContainer>
@@ -150,7 +191,7 @@ const AcceptAny = () => {
             const address = data.value;
             if (!visible) return null;
 
-            const selectedValue = allAddressOptions.find(
+            const selectedOption = allAddressOptions.find(
               (addressOption) => addressOption.value === token
             );
 
@@ -180,22 +221,15 @@ const AcceptAny = () => {
                         width: "100%",
                       }),
                     }}
-                    value={selectedValue}
+                    value={selectedOption}
                     label="Select CryptoCurrency"
                     options={currentAddressOptions}
-                    onChange={(newAddressOption) => {
-                      setAllWalletState({
-                        ...allWalletState,
-                        [newAddressOption.value]: {
-                          value: "",
-                          visible: true,
-                        },
-                        [selectedValue.value]: {
-                          value: "",
-                          visible: false,
-                        },
-                      });
-                    }}
+                    onChange={(newAddressOption) =>
+                      selectCryptoCurrency(
+                        newAddressOption as AddressOption,
+                        selectedOption
+                      )
+                    }
                   />
                   <BiPlusCircle
                     color="white"
@@ -206,10 +240,11 @@ const AcceptAny = () => {
                       transform: "rotate(45deg)",
                     }}
                     onClick={() => {
-                      editWalletAddress(selectedValue.value, {
-                        value: "",
-                        visible: false,
-                      });
+                      selectedOption &&
+                        editWalletAddress(selectedOption.value, {
+                          value: "",
+                          visible: false,
+                        });
                     }}
                   />
                 </SelectContainer>
@@ -236,9 +271,10 @@ const AcceptAny = () => {
                 padding: "40px 30px 50px 30px",
               }}
             >
-              <a href={buildHref} target="_blank" style={{ color: "black" }}>
+              <TextDisplayWithCopyButton text={buildHref} isAnchor />
+              {/* <a href={buildHref} target="_blank" style={{ color: "black" }}>
                 <code>{buildHref}</code>
-              </a>
+              </a> */}
             </div>
           </>
         )}
