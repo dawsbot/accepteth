@@ -26,6 +26,7 @@ const CopyButton = styled.button`
   height: 40px;
   border-radius: 0px 6px 6px 0px;
   font-size: 14px;
+  margin-right: -1px; // chrome border bug
 `;
 
 const AnchorHOC: React.FunctionComponent<{
@@ -61,6 +62,7 @@ export const TextDisplayWithCopyButton = ({
             height: "40px",
             overflowX: "scroll",
             whiteSpace: "nowrap",
+            letterSpacing: "-0.3px",
           }}
         >
           {text}

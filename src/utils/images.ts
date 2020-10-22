@@ -1,7 +1,7 @@
 // all free images from https://cryptologos.cc/
 export const images = {
-  Bitcoin: "https://cryptologos.cc/logos/bitcoin-btc-logo.svg?v=007",
   Ethereum: "https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=007",
+  Bitcoin: "https://cryptologos.cc/logos/bitcoin-btc-logo.svg?v=007",
   "Bitcoin Cash":
     "https://cryptologos.cc/logos/bitcoin-cash-bch-logo.svg?v=007",
   "Ethereum Classic":

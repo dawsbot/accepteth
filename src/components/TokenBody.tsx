@@ -2,8 +2,8 @@ import React from "react";
 import QRCode from "qrcode.react";
 import { HiLockClosed } from "react-icons/hi";
 import styled from "styled-components";
-import { AllValidTokens } from "./AcceptAny";
 import { TextDisplayWithCopyButton } from "./TextDisplayWithCopyButton";
+import { AllValidTokens } from "../utils/images";
 
 const ValidateAddressLink = styled.a`
   color: white;
@@ -14,7 +14,7 @@ const ValidateAddressLink = styled.a`
   padding: 20px 30px;
   font-weight: bold;
   background-image: linear-gradient(to right, #69e495, #0eb8c5);
-  border-radius: 0px 0px 8px 8px;
+  border-radius: 0px 0px 6px 6px;
 `;
 
 const QRContainer = styled.div`

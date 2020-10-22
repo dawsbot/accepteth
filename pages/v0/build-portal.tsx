@@ -58,8 +58,9 @@ const allAddressOptions: AllAddressOptions = (Object.keys(
 const Header = styled.div`
   background-color: black;
   padding: 50px 30px;
-  border-radius: 10px 10px 0px 0px;
-  margin: 0px;
+  border-radius: 6px 6px 0px 0px;
+  margin: -1px;
+  padding-top: -1px;
 `;
 
 const H3 = styled.h3`
@@ -73,10 +74,11 @@ const Input = styled.input`
   box-sizing: border-box;
   padding: 4px 10px;
   font-size: 14px;
-  border-radius: 4px;
+  border-radius: 6px;
   border-width: 0px;
   width: 100%;
   font-family: monospace;
+  letter-spacing: -0.3px;
   margin-top: 10px;
 `;
 
