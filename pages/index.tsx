@@ -1,5 +1,8 @@
-import { AcceptAny } from "../src/components/AcceptAny";
+const Index = () => {
+  if (typeof window !== "undefined") {
+    window.location.href = "https://accepteth.unicornplatform.com/";
+  }
+  return null;
+};
 
-export default function Home() {
-  return <AcceptAny />;
-}
+export default Index;

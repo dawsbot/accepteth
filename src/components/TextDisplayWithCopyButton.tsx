@@ -28,12 +28,12 @@ const CopyButton = styled.button`
   font-size: 14px;
 `;
 
-const AnchorHOC: React.FunctionComponent<{ isAnchor: boolean }> = ({
-  isAnchor,
-  children,
-}) => {
+const AnchorHOC: React.FunctionComponent<{
+  href?: string;
+  isAnchor: boolean;
+}> = ({ isAnchor, href, children }) => {
   return isAnchor ? (
-    <a href={children as string} target="_blank" style={{ color: "black" }}>
+    <a href={href} target="_blank" style={{ color: "black" }}>
       {children}
     </a>
   ) : (
@@ -53,7 +53,7 @@ export const TextDisplayWithCopyButton = ({
   }, [text]);
   return (
     <TextContainer>
-      <AnchorHOC isAnchor={Boolean(isAnchor)}>
+      <AnchorHOC isAnchor={Boolean(isAnchor)} href={text}>
         <code
           style={{
             display: "flex",

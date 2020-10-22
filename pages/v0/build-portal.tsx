@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import Select from "react-select";
 import { BiPlusCircle } from "react-icons/bi";
+import createPersistedState from "use-persisted-state";
+const useWalletState = createPersistedState(
+  "@@accept-eth/v0/build-portal/walletState"
+);
 
 import { images } from "../../src/utils/images";
 import { CenterChildren } from "../../src/components/CenterChildren";
@@ -105,7 +109,7 @@ const initialState = (Object.keys(images) as AllValidTokens[]).reduce(
 initialState.Ethereum.visible = true;
 
 const AcceptAny = () => {
-  const [allWalletState, setAllWalletState] = useState(initialState);
+  const [allWalletState, setAllWalletState] = useWalletState(initialState);
   const editWalletAddress = (
     token: keyof typeof images,
     newData: { value: string; visible: boolean }
@@ -272,9 +276,6 @@ const AcceptAny = () => {
               }}
             >
               <TextDisplayWithCopyButton text={buildHref} isAnchor />
-              {/* <a href={buildHref} target="_blank" style={{ color: "black" }}>
-                <code>{buildHref}</code>
-              </a> */}
             </div>
           </>
         )}

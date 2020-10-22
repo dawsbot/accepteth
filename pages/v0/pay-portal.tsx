@@ -60,6 +60,11 @@ const AcceptAny = () => {
     });
 
     setAllAddressOptions(initialAddressOptions as any);
+    if (allAddresses.hasOwnProperty("Ethereum")) {
+      setSelectedValue(
+        initialAddressOptions.find(({ value }) => value === "Ethereum")
+      );
+    }
   }, [router.query]);
 
   const currentAddress = router.query[selectedValue.value] as string;
