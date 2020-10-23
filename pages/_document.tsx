@@ -40,9 +40,28 @@ export default class MyDocument extends Document {
         <Head>
           <link
             rel="shortcut icon"
-            href="https://cryptologos.cc/logos/ethereum-eth-logo.svg?v=007"
+            href="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/237/money-with-wings_1f4b8.png"
           />
-          <meta name="description" content="Accept crypto in 60 seconds. " />
+          <meta
+            name="description"
+            content="Accept crypto payments in 60 seconds. Free and open-sourced! Access money from the global cryptocurrency economy and start accepting Ethereum, Bitcoin, and more."
+          />
+
+          <meta
+            name="og:description"
+            content="Accept crypto payments in 60 seconds. Free and open-sourced! Access money from the global cryptocurrency economy and start accepting Ethereum, Bitcoin, and more."
+          />
+          <meta property="og:type" content="website" />
+          <meta
+            property="og:image"
+            content="https://ucarecdn.com/73b716cf-6904-40d9-872a-b1d1554f12cf/image.png"
+          />
+          <meta name="twitter:card" content="summary" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta
+            name="twitter:image"
+            content="https://ucarecdn.com/73b716cf-6904-40d9-872a-b1d1554f12cf/image.png"
+          />
         </Head>
         <body>
           <Main />

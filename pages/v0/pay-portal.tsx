@@ -9,6 +9,7 @@ import { AllValidTokens, images } from "../../src/utils/images";
 import { useRouter } from "next/dist/client/router";
 import { CenterChildren } from "../../src/components/CenterChildren";
 import { PortalContainer } from "../../src/components/PortalContainer";
+import Head from "next/head";
 export type ObjectEntries = <T>(
   o: T
 ) => [Extract<keyof T, string>, T[keyof T]][];
@@ -38,7 +39,7 @@ const H3 = styled.h3`
   margin-top: 0px;
 `;
 
-const AcceptAny = () => {
+const PayPortal = () => {
   const [allAddressOptions, setAllAddressOptions] = useState([
     { value: "", label: null, color: "" },
   ]);
@@ -69,23 +70,29 @@ const AcceptAny = () => {
 
   const currentAddress = router.query[selectedValue.value] as string;
   return (
-    <CenterChildren>
-      <PortalContainer>
-        <Header>
-          <H3>I want to send</H3>
-          <Select
-            value={selectedValue}
-            label="Select CryptoCurrency"
-            options={allAddressOptions}
-            onChange={setSelectedValue}
-          />
-        </Header>
-        {currentAddress && (
-          <TokenBody token={selectedValue.value} address={currentAddress} />
-        )}
-      </PortalContainer>
-    </CenterChildren>
+    <>
+      <Head>
+        <title>AcceptEth | Pay</title>
+        <meta name="og:title" content="AcceptEth | Pay" />
+      </Head>
+      <CenterChildren>
+        <PortalContainer>
+          <Header>
+            <H3>I want to send</H3>
+            <Select
+              value={selectedValue}
+              label="Select CryptoCurrency"
+              options={allAddressOptions}
+              onChange={setSelectedValue}
+            />
+          </Header>
+          {currentAddress && (
+            <TokenBody token={selectedValue.value} address={currentAddress} />
+          )}
+        </PortalContainer>
+      </CenterChildren>
+    </>
   );
 };
 
-export default AcceptAny;
+export default PayPortal;

@@ -12,6 +12,7 @@ import { images } from "../../src/utils/images";
 import { CenterChildren } from "../../src/components/CenterChildren";
 import { PortalContainer } from "../../src/components/PortalContainer";
 import { TextDisplayWithCopyButton } from "../../src/components/TextDisplayWithCopyButton";
+import Head from "next/head";
 export type ObjectEntries = <T>(
   o: T
 ) => [Extract<keyof T, string>, T[keyof T]][];
@@ -110,7 +111,7 @@ const initialState = (Object.keys(images) as AllValidTokens[]).reduce(
 // default only ethereum visible
 initialState.Ethereum.visible = true;
 
-const AcceptAny = () => {
+const BuildPortal = () => {
   const [allWalletState, setAllWalletState] = useWalletState(initialState);
   const editWalletAddress = (
     token: keyof typeof images,
@@ -177,113 +178,119 @@ const AcceptAny = () => {
     });
   };
   return (
-    <CenterChildren>
-      <PortalContainer>
-        <Header>
-          <PlusContainer>
-            <H3>I want to accept</H3>{" "}
-            {allVisibleWalletState.length <
-              Object.keys(allWalletState).length && (
-              <BiPlusCircle
-                color="white"
-                size="38"
-                style={{ marginLeft: "10px", cursor: "pointer" }}
-                onClick={makeNewTokenVisible}
-              />
-            )}
-          </PlusContainer>
-          {Object.entries(allWalletState).map(([token, data]: any) => {
-            const { visible } = data;
-            const address = data.value;
-            if (!visible) return null;
+    <>
+      <Head>
+        <title>AcceptEth | Build</title>
+        <meta name="og:title" content="AcceptEth | Build" />
+      </Head>
+      <CenterChildren>
+        <PortalContainer>
+          <Header>
+            <PlusContainer>
+              <H3>I want to accept</H3>{" "}
+              {allVisibleWalletState.length <
+                Object.keys(allWalletState).length && (
+                <BiPlusCircle
+                  color="white"
+                  size="38"
+                  style={{ marginLeft: "10px", cursor: "pointer" }}
+                  onClick={makeNewTokenVisible}
+                />
+              )}
+            </PlusContainer>
+            {Object.entries(allWalletState).map(([token, data]: any) => {
+              const { visible } = data;
+              const address = data.value;
+              if (!visible) return null;
 
-            const selectedOption = allAddressOptions.find(
-              (addressOption) => addressOption.value === token
-            );
+              const selectedOption = allAddressOptions.find(
+                (addressOption) => addressOption.value === token
+              );
 
-            const currentAddressOptions = allAddressOptions.filter(
-              (addressOption) => {
-                const allVisibleTokens = Object.entries(allWalletState)
-                  .filter(([token, data]: any) => data.visible)
-                  .map(([token, data]: any) => token);
-                return !allVisibleTokens.includes(addressOption.value);
-              }
-            );
-            return (
+              const currentAddressOptions = allAddressOptions.filter(
+                (addressOption) => {
+                  const allVisibleTokens = Object.entries(allWalletState)
+                    .filter(([token, data]: any) => data.visible)
+                    .map(([token, data]: any) => token);
+                  return !allVisibleTokens.includes(addressOption.value);
+                }
+              );
+              return (
+                <div
+                  key={token}
+                  style={{
+                    marginTop: "20px",
+                    border: "1px solid white",
+                    padding: "8px",
+                    borderRadius: "6px",
+                  }}
+                >
+                  <SelectContainer>
+                    <Select
+                      styles={{
+                        container: (provided) => ({
+                          ...provided,
+                          width: "100%",
+                        }),
+                      }}
+                      value={selectedOption}
+                      label="Select CryptoCurrency"
+                      options={currentAddressOptions}
+                      onChange={(newAddressOption) =>
+                        selectCryptoCurrency(
+                          newAddressOption as AddressOption,
+                          selectedOption
+                        )
+                      }
+                    />
+                    <BiPlusCircle
+                      color="white"
+                      size="38"
+                      style={{
+                        marginLeft: "10px",
+                        cursor: "pointer",
+                        transform: "rotate(45deg)",
+                      }}
+                      onClick={() => {
+                        selectedOption &&
+                          editWalletAddress(selectedOption.value, {
+                            value: "",
+                            visible: false,
+                          });
+                      }}
+                    />
+                  </SelectContainer>
+                  <Input
+                    value={address}
+                    onChange={(e) =>
+                      editWalletAddress(token, {
+                        value: e.target.value,
+                        visible: true,
+                      })
+                    }
+                    placeholder={`Your ${token} address`}
+                  />
+                </div>
+              );
+            })}
+          </Header>
+
+          {isClient && allVisibleNonEmptyWalletState.length > 0 && (
+            <>
+              <ColoredBar />
               <div
-                key={token}
                 style={{
-                  marginTop: "20px",
-                  border: "1px solid white",
-                  padding: "8px",
-                  borderRadius: "6px",
+                  padding: "40px 30px 50px 30px",
                 }}
               >
-                <SelectContainer>
-                  <Select
-                    styles={{
-                      container: (provided) => ({
-                        ...provided,
-                        width: "100%",
-                      }),
-                    }}
-                    value={selectedOption}
-                    label="Select CryptoCurrency"
-                    options={currentAddressOptions}
-                    onChange={(newAddressOption) =>
-                      selectCryptoCurrency(
-                        newAddressOption as AddressOption,
-                        selectedOption
-                      )
-                    }
-                  />
-                  <BiPlusCircle
-                    color="white"
-                    size="38"
-                    style={{
-                      marginLeft: "10px",
-                      cursor: "pointer",
-                      transform: "rotate(45deg)",
-                    }}
-                    onClick={() => {
-                      selectedOption &&
-                        editWalletAddress(selectedOption.value, {
-                          value: "",
-                          visible: false,
-                        });
-                    }}
-                  />
-                </SelectContainer>
-                <Input
-                  value={address}
-                  onChange={(e) =>
-                    editWalletAddress(token, {
-                      value: e.target.value,
-                      visible: true,
-                    })
-                  }
-                  placeholder={`Your ${token} address`}
-                />
+                <TextDisplayWithCopyButton text={buildHref} isAnchor />
               </div>
-            );
-          })}
-        </Header>
-
-        {isClient && allVisibleNonEmptyWalletState.length > 0 && (
-          <>
-            <ColoredBar />
-            <div
-              style={{
-                padding: "40px 30px 50px 30px",
-              }}
-            >
-              <TextDisplayWithCopyButton text={buildHref} isAnchor />
-            </div>
-          </>
-        )}
-      </PortalContainer>
-    </CenterChildren>
+            </>
+          )}
+        </PortalContainer>
+      </CenterChildren>
+    </>
   );
 };
 
-export default AcceptAny;
+export default BuildPortal;

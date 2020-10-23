@@ -22,6 +22,24 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>AcceptEth</title>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+                <script
+                async
+                src="https://www.googletagmanager.com/gtag/js?id=G-J52ZQ1G3KQ"
+              ></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J52ZQ1G3KQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-J52ZQ1G3KQ');
+</script>
+            `,
+          }}
+        />
       </Head>
       <Container>
         <Component {...pageProps} />
